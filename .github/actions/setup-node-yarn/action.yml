@@ -18,10 +18,11 @@ runs:
       with:
         node-version: '26.10'
 
+    # '--force' replaces runner-image global Yarn 1 shims (Windows images ship 'yarn.cmd' -> EEXIST).
     - name: Enable Corepack
       shell: bash
       run: |
-        npm install -g corepack@0.36.0
+        npm install -g --force corepack@0.36.0
         corepack enable
 
     - name: Resolve Yarn cache folder
