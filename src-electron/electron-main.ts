@@ -8,6 +8,7 @@ import { windowsDevToolsExtensionsFix } from 'app/src-electron/mainScripts/chrom
 import { startApp, openAppWindowManager, closeAppManager } from 'app/src-electron/mainScripts/appManagement'
 import { setupFaAppProtocol } from 'app/src-electron/mainScripts/appProtocol/appProtocol_manager'
 import { tweakMenuRemover, tweakRetriveOS } from 'app/src-electron/mainScripts/nativeShell/nativeShell_manager'
+import { installFaMacAppMenu } from 'app/src-electron/mainScripts/appMenu/installFaMacAppMenuWiring'
 
 // Determines what platform the app is running on
 // - Needed in case process is undefined under Linux (Linux bug?)
@@ -27,8 +28,9 @@ setupFaAppProtocol()
 // Register all ipcMain handlers before any BrowserWindow loads; preload uses invoke for bridge APIs after load.
 startApp()
 
-// Remove normal app menu
+// Remove the default Electron menu; macOS then gets the native application menu (Edit / Window roles, Settings, Help)
 tweakMenuRemover()
+installFaMacAppMenu(platform)
 
 // Set up manager for opening a singular app window
 openAppWindowManager()

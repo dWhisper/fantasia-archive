@@ -95,6 +95,19 @@ export interface I_faWindowControlAPI {
    */
   refreshWebContents: () => Promise<void>
 
+  /**
+   * Recolors the Windows / Linux native caption-button overlay to match the app header (no-op on macOS).
+   */
+  setTitleBarOverlayColors: (colors: I_faTitleBarOverlayColors) => Promise<void>
+
+}
+
+/**
+ * Header-matched colors for the native caption-button overlay, both '#RRGGBB'.
+ */
+export interface I_faTitleBarOverlayColors {
+  color: string
+  symbolColor: string
 }
 
 /**
@@ -160,4 +173,38 @@ export interface I_faProjectFailsafeAPI {
 export interface I_faProjectOsOpenAPI {
   installOsOpenListener: (onOpen: (filePath: string) => void) => void
   sendRendererReady: () => void
+}
+
+/**
+ * Renderer actions the native macOS application menu may trigger (payload-free 'runFaAction' ids).
+ */
+export type T_faAppMenuActionId =
+  | 'openAboutFantasiaArchiveDialog'
+  | 'openAdvancedSearchGuideDialog'
+  | 'openAppSettingsDialog'
+  | 'openChangelogDialog'
+  | 'openKeybindSettingsDialog'
+
+/**
+ * Main to renderer bridge for native application menu clicks (macOS).
+ */
+export interface I_faAppMenuAPI {
+
+  /**
+   * Subscribes once to menu clicks; only allowlisted action ids reach the callback.
+   */
+  installActionListener: (onAction: (actionId: T_faAppMenuActionId) => void) => void
+
+}
+
+/**
+ * Structural subset of Electron 'MenuItemConstructorOptions' built by pure menu template functions.
+ */
+export interface I_faAppMenuTemplateItem {
+  accelerator?: string
+  click?: () => void
+  label?: string
+  role?: string
+  submenu?: I_faAppMenuTemplateItem[]
+  type?: 'separator'
 }

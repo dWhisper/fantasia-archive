@@ -157,3 +157,19 @@ test('Test that refreshWebContents does not throw when invoke rejects', async ()
 
   await expect(faWindowControlAPI.refreshWebContents()).resolves.toBeUndefined()
 })
+
+/**
+ * setTitleBarOverlayColors
+ * Forwards colors on the overlay channel and swallows invoke rejection.
+ */
+test('Test that setTitleBarOverlayColors invokes the overlay channel and ignores rejection', async () => {
+  invokeMock.mockRejectedValue(new Error('ipc failed'))
+  const { faWindowControlAPI } = await import('../faWindowControlAPI')
+  const colors = {
+    color: '#183e4d',
+    symbolColor: '#f5f5f5'
+  }
+
+  await expect(faWindowControlAPI.setTitleBarOverlayColors(colors)).resolves.toBeUndefined()
+  expect(invokeMock).toHaveBeenCalledWith(FA_WINDOW_CONTROL_IPC.setTitleBarOverlayColorsAsync, colors)
+})

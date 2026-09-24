@@ -44,6 +44,7 @@ export default defineConfig((ctx) => {
       'qmarkdown',
       'faProjectFailsafePathReply',
       'faProjectOsOpen',
+      'faAppMenu',
       'faRoutingEnv',
       'faE2eRendererProbes',
       'faComponentTestingRendererProbes'

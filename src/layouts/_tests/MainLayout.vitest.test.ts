@@ -772,7 +772,7 @@ afterEach(() => {
 
 /**
  * MainLayout
- * macOS Electron uses native traffic lights: layout gets the platform class and skips GlobalWindowButtons.
+ * macOS Electron uses native traffic lights: both native-control classes, no GlobalWindowButtons.
  */
 test('Test that MainLayout hides GlobalWindowButtons under the macOS native title bar', async () => {
   const { Platform } = await import('quasar')
@@ -787,6 +787,7 @@ test('Test that MainLayout hides GlobalWindowButtons under the macOS native titl
   const w = await mountMainLayoutForVitest('/')
   await flushPromises()
 
+  expect(w.find('.appShellLayout--nativeWindowControls').exists()).toBe(true)
   expect(w.find('.appShellLayout--macNativeTitleBar').exists()).toBe(true)
   expect(w.find('[data-test-stub="global-window-buttons"]').exists()).toBe(false)
 
@@ -797,9 +798,35 @@ test('Test that MainLayout hides GlobalWindowButtons under the macOS native titl
 
 /**
  * MainLayout
- * Windows, Linux, and non-Electron builds keep the custom window buttons.
+ * Windows / Linux Electron use the native caption overlay: no traffic-light inset, no GlobalWindowButtons.
  */
-test('Test that MainLayout keeps GlobalWindowButtons outside the macOS native title bar', async () => {
+test('Test that MainLayout hides GlobalWindowButtons under the Windows / Linux caption overlay', async () => {
+  const { Platform } = await import('quasar')
+  const originalIs = Platform.is
+  setFantasiaStorybookCanvasFlag(false)
+  vi.stubEnv('MODE', 'electron')
+  Platform.is = {
+    ...originalIs,
+    mac: false
+  }
+
+  const w = await mountMainLayoutForVitest('/')
+  await flushPromises()
+
+  expect(w.find('.appShellLayout--nativeWindowControls').exists()).toBe(true)
+  expect(w.find('.appShellLayout--macNativeTitleBar').exists()).toBe(false)
+  expect(w.find('[data-test-stub="global-window-buttons"]').exists()).toBe(false)
+
+  w.unmount()
+  Platform.is = originalIs
+  vi.unstubAllEnvs()
+})
+
+/**
+ * MainLayout
+ * Non-Electron builds (Storybook, SPA) keep the custom window buttons.
+ */
+test('Test that MainLayout keeps GlobalWindowButtons outside Electron', async () => {
   const { Platform } = await import('quasar')
   const originalIs = Platform.is
   setFantasiaStorybookCanvasFlag(false)
@@ -812,6 +839,7 @@ test('Test that MainLayout keeps GlobalWindowButtons outside the macOS native ti
   const w = await mountMainLayoutForVitest('/')
   await flushPromises()
 
+  expect(w.find('.appShellLayout--nativeWindowControls').exists()).toBe(false)
   expect(w.find('.appShellLayout--macNativeTitleBar').exists()).toBe(false)
   expect(w.find('[data-test-stub="global-window-buttons"]').exists()).toBe(true)
 

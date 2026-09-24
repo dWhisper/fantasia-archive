@@ -19,6 +19,7 @@ const mocks = vi.hoisted(() => {
   }))
   const setBoundsMock = vi.fn()
   const reloadMock = vi.fn()
+  const setTitleBarOverlayMock = vi.fn()
 
   const fakeWindow = {
     close: closeMock,
@@ -28,6 +29,7 @@ const mocks = vi.hoisted(() => {
     maximize: maximizeMock,
     minimize: minimizeMock,
     setBounds: setBoundsMock,
+    setTitleBarOverlay: setTitleBarOverlayMock,
     unmaximize: unmaximizeMock,
     webContents: {
       reload: reloadMock
@@ -45,6 +47,7 @@ const mocks = vi.hoisted(() => {
     minimizeMock,
     reloadMock,
     setBoundsMock,
+    setTitleBarOverlayMock,
     unmaximizeMock
   }
 })
@@ -79,6 +82,7 @@ beforeEach(async () => {
   })
   mocks.setBoundsMock.mockReset()
   mocks.reloadMock.mockReset()
+  mocks.setTitleBarOverlayMock.mockReset()
   mocks.fromWebContentsMock.mockReturnValue(mocks.fakeWindow)
 })
 
@@ -106,7 +110,8 @@ test('Test that registerFaWindowControlIpc registers each window control async c
     FA_WINDOW_CONTROL_IPC.maximizeAsync,
     FA_WINDOW_CONTROL_IPC.resizeToggleAsync,
     FA_WINDOW_CONTROL_IPC.closeAsync,
-    FA_WINDOW_CONTROL_IPC.refreshWebContentsAsync
+    FA_WINDOW_CONTROL_IPC.refreshWebContentsAsync,
+    FA_WINDOW_CONTROL_IPC.setTitleBarOverlayColorsAsync
   ])
 })
 
@@ -372,4 +377,62 @@ test('Test that windowFromIpcEvent returns undefined when fromWebContents is nul
   const { windowFromIpcEvent } = await import('../registerFaWindowControlIpc')
 
   expect(windowFromIpcEvent({ sender: fakeSender } as IpcMainEvent)).toBeUndefined()
+})
+
+function withPlatform (platform: string, run: () => void): void {
+  const original = Object.getOwnPropertyDescriptor(process, 'platform')!
+  Object.defineProperty(process, 'platform', { value: platform })
+  try {
+    run()
+  } finally {
+    Object.defineProperty(process, 'platform', original)
+  }
+}
+
+/**
+ * registerFaWindowControlIpc
+ * setTitleBarOverlayColorsAsync recolors the sender window overlay on Windows / Linux.
+ */
+test('Test that registerFaWindowControlIpc setTitleBarOverlayColorsAsync applies valid colors off macOS', async () => {
+  const { registerFaWindowControlIpc } = await import('../registerFaWindowControlIpc')
+  registerFaWindowControlIpc()
+
+  withPlatform('win32', () => {
+    handlerFor(FA_WINDOW_CONTROL_IPC.setTitleBarOverlayColorsAsync)({ sender: fakeSender }, {
+      color: '#183e4d',
+      symbolColor: '#f5f5f5'
+    })
+  })
+
+  expect(mocks.setTitleBarOverlayMock).toHaveBeenCalledWith({
+    color: '#183e4d',
+    symbolColor: '#f5f5f5'
+  })
+})
+
+/**
+ * registerFaWindowControlIpc
+ * Invalid payloads, macOS, and a missing sender window never touch the overlay.
+ */
+test('Test that registerFaWindowControlIpc setTitleBarOverlayColorsAsync ignores invalid, macOS, and windowless calls', async () => {
+  const { registerFaWindowControlIpc } = await import('../registerFaWindowControlIpc')
+  registerFaWindowControlIpc()
+  const handler = handlerFor(FA_WINDOW_CONTROL_IPC.setTitleBarOverlayColorsAsync)
+  const valid = {
+    color: '#183e4d',
+    symbolColor: '#f5f5f5'
+  }
+
+  withPlatform('linux', () => {
+    handler({ sender: fakeSender }, { color: 'red' })
+  })
+  withPlatform('darwin', () => {
+    handler({ sender: fakeSender }, valid)
+  })
+  mocks.fromWebContentsMock.mockReturnValue(null)
+  withPlatform('linux', () => {
+    expect(() => handler({ sender: fakeSender }, valid)).not.toThrow()
+  })
+
+  expect(mocks.setTitleBarOverlayMock).not.toHaveBeenCalled()
 })

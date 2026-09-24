@@ -2,12 +2,13 @@ import { expect, test } from 'vitest'
 
 import {
   FA_MAC_TRAFFIC_LIGHT_POSITION,
+  FA_TITLE_BAR_OVERLAY_DEFAULTS,
   resolveFaMainWindowChromeOptions
 } from '../faMainWindowChromeOptions'
 
 /**
  * resolveFaMainWindowChromeOptions
- * macOS keeps native traffic lights with a hidden title bar instead of a frameless window.
+ * macOS keeps native traffic lights with a hidden title bar and no caption overlay.
  */
 test('Test that resolveFaMainWindowChromeOptions uses hidden title bar with traffic lights on darwin', () => {
   const options = resolveFaMainWindowChromeOptions('darwin')
@@ -19,23 +20,29 @@ test('Test that resolveFaMainWindowChromeOptions uses hidden title bar with traf
       y: FA_MAC_TRAFFIC_LIGHT_POSITION.y
     }
   })
-  expect(options.frame).toBeUndefined()
+  expect(options.titleBarOverlay).toBeUndefined()
 })
 
 /**
  * resolveFaMainWindowChromeOptions
- * Returned position is a copy so callers cannot mutate the shared constant.
+ * Returned nested objects are copies so callers cannot mutate the shared constants.
  */
-test('Test that resolveFaMainWindowChromeOptions returns a fresh traffic light position object', () => {
-  const options = resolveFaMainWindowChromeOptions('darwin')
-
-  expect(options.trafficLightPosition).not.toBe(FA_MAC_TRAFFIC_LIGHT_POSITION)
+test('Test that resolveFaMainWindowChromeOptions returns fresh nested objects', () => {
+  expect(resolveFaMainWindowChromeOptions('darwin').trafficLightPosition).not.toBe(FA_MAC_TRAFFIC_LIGHT_POSITION)
+  expect(resolveFaMainWindowChromeOptions('win32').titleBarOverlay).not.toBe(FA_TITLE_BAR_OVERLAY_DEFAULTS)
 })
 
 /**
  * resolveFaMainWindowChromeOptions
- * Windows and Linux stay frameless so the renderer draws its own window buttons.
+ * Windows and Linux use the native Window Controls Overlay caption buttons.
  */
-test.each(['win32', 'linux'])('Test that resolveFaMainWindowChromeOptions stays frameless on %s', (platform) => {
-  expect(resolveFaMainWindowChromeOptions(platform)).toEqual({ frame: false })
+test.each(['win32', 'linux'])('Test that resolveFaMainWindowChromeOptions uses the native caption overlay on %s', (platform) => {
+  expect(resolveFaMainWindowChromeOptions(platform)).toEqual({
+    titleBarOverlay: {
+      color: FA_TITLE_BAR_OVERLAY_DEFAULTS.color,
+      height: FA_TITLE_BAR_OVERLAY_DEFAULTS.height,
+      symbolColor: FA_TITLE_BAR_OVERLAY_DEFAULTS.symbolColor
+    },
+    titleBarStyle: 'hidden'
+  })
 })

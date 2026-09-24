@@ -1,5 +1,6 @@
 import type {
   I_appDetailsAPI,
+  I_faAppMenuAPI,
   I_extraEnvVariablesBridge,
   I_faDevToolsControl,
   I_faExternalLinksManagerAPI,
@@ -94,6 +95,7 @@ declare global{
       faAppConfig: I_faAppConfigAPI,
       faProjectFailsafe: I_faProjectFailsafeAPI,
       faProjectOsOpen: I_faProjectOsOpenAPI,
+      faAppMenu: I_faAppMenuAPI,
       projectManagement: I_faProjectManagementAPI,
       projectContent: I_faProjectContentAPI
     }

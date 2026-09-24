@@ -2,6 +2,7 @@ import { BrowserWindow, ipcMain } from 'electron'
 import type { IpcMainEvent, IpcMainInvokeEvent, Rectangle } from 'electron'
 
 import { FA_WINDOW_CONTROL_IPC } from 'app/src-electron/electron-ipc-bridge'
+import { faTitleBarOverlayColorsSchema } from 'app/src-electron/shared/faTitleBarOverlayColorsSchema'
 
 let registered = false
 
@@ -34,7 +35,7 @@ export function windowFromIpcEvent (event: IpcMainEvent | IpcMainInvokeEvent): B
 }
 
 /**
- * Registers async IPC handlers for frameless window chrome (minimize, maximize, close).
+ * Registers async IPC handlers for window chrome (minimize, maximize, close, caption overlay colors).
  * Safe to call once from 'startApp'; subsequent calls no-op.
  */
 export function registerFaWindowControlIpc (): void {
@@ -87,5 +88,21 @@ export function registerFaWindowControlIpc (): void {
   ipcMain.handle(FA_WINDOW_CONTROL_IPC.refreshWebContentsAsync, (event) => {
     const w = windowFromIpcEvent(event)
     w?.webContents.reload()
+  })
+
+  // Windows / Linux caption-button overlay follows the live header colors; macOS has no overlay.
+  ipcMain.handle(FA_WINDOW_CONTROL_IPC.setTitleBarOverlayColorsAsync, (event, payload: unknown) => {
+    if (process.platform === 'darwin') {
+      return
+    }
+    const parsed = faTitleBarOverlayColorsSchema.safeParse(payload)
+    if (!parsed.success) {
+      return
+    }
+    const w = windowFromIpcEvent(event)
+    w?.setTitleBarOverlay({
+      color: parsed.data.color,
+      symbolColor: parsed.data.symbolColor
+    })
   })
 }

@@ -246,7 +246,8 @@ const baseBridge = () => {
       maximizeWindow: async () => undefined,
       minimizeWindow: async () => undefined,
       refreshWebContents: async () => undefined,
-      resizeWindow: async () => undefined
+      resizeWindow: async () => undefined,
+      setTitleBarOverlayColors: async () => undefined
     },
     faDevToolsControl: {
       checkDevToolsStatus: async () => false,
@@ -310,6 +311,9 @@ const baseBridge = () => {
     faProjectOsOpen: {
       installOsOpenListener: () => undefined,
       sendRendererReady: () => undefined
+    },
+    faAppMenu: {
+      installActionListener: () => undefined
     },
     projectContent: createFaProjectContentBridgeHarnessStub(),
     projectManagement: {
@@ -414,6 +418,10 @@ export const setContentBridgeScenario = (
     faProjectOsOpen: {
       ...nextBridge.faProjectOsOpen,
       ...(overrides.faProjectOsOpen ?? {})
+    },
+    faAppMenu: {
+      ...nextBridge.faAppMenu,
+      ...(overrides.faAppMenu ?? {})
     },
     projectContent: {
       ...nextBridge.projectContent,

@@ -39,5 +39,11 @@ export const faWindowControlAPI: I_faWindowControlAPI = {
     await ipcRenderer
       .invoke(FA_WINDOW_CONTROL_IPC.refreshWebContentsAsync)
       .catch(() => undefined)
+  },
+
+  async setTitleBarOverlayColors (colors) {
+    await ipcRenderer
+      .invoke(FA_WINDOW_CONTROL_IPC.setTitleBarOverlayColorsAsync, colors)
+      .catch(() => undefined)
   }
 }
