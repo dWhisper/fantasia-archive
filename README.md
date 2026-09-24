@@ -127,7 +127,7 @@ Lint (repo) + **`vue-tsc`** + Stylelint + Vitest coverage (**per file**: **95%**
 
 **Changelog-only** exception: only **`i18n/*/documents/changeLog.md`** after full gate passed on substantive work — see [testing-terminal-isolation.mdc](.cursor/rules/testing-terminal-isolation.mdc).
 
-**CI Verify** (`.github/workflows/verify.yml`): **`yarn testbatch:verify`** only — not Playwright, Electron prod build, or Storybook VRT.
+**CI Verify** (`.github/workflows/verify.yml`): **`yarn testbatch:verify`** on an **Ubuntu** + **macOS** matrix only — not Playwright, Electron prod build, or Storybook VRT.
 
 Full chained gate:
 
