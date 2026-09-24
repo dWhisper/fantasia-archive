@@ -1,6 +1,6 @@
 /**
  * Commit message policy aligned with .cursor/rules/git-conventional-commits.mdc and AGENTS.md.
- * Enforced locally via Husky (.husky/commit-msg) after yarn install (prepare script).
+ * Enforced locally via Husky (.husky/commit-msg) after yarn install (postinstall script).
  */
 export default {
   extends: ['@commitlint/config-conventional'],

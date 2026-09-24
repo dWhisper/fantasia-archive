@@ -28,18 +28,8 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v5
 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v5
-        with:
-          node-version: '22.22'
-          cache: yarn
-          cache-dependency-path: yarn.lock
-
-      - name: Install Yarn 1.x
-        run: npm install -g yarn@1.22.19
-
-      - name: Install root dependencies
-        run: yarn install --frozen-lockfile
+      - name: Setup Node.js and Yarn
+        uses: ./.github/actions/setup-node-yarn
 
       - name: Production Electron build
         run: yarn quasar:build:electron
@@ -66,15 +56,8 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v5
 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v5
-        with:
-          node-version: '22.22'
-          cache: yarn
-          cache-dependency-path: yarn.lock
-
-      - name: Install Yarn 1.x
-        run: npm install -g yarn@1.22.19
+      - name: Setup Node.js and Yarn
+        uses: ./.github/actions/setup-node-yarn
 
       - name: Install base packaging tools (deb/rpm/AppImage)
         run: |
@@ -82,9 +65,6 @@ jobs:
           sudo apt-get install -y --no-install-recommends \
             fakeroot \
             rpm
-
-      - name: Install root dependencies
-        run: yarn install --frozen-lockfile
 
       - name: Production Electron build (${{ matrix.linux_pkg }})
         env:
@@ -106,18 +86,8 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v5
 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v5
-        with:
-          node-version: '22.22'
-          cache: yarn
-          cache-dependency-path: yarn.lock
-
-      - name: Install Yarn 1.x
-        run: npm install -g yarn@1.22.19
-
-      - name: Install root dependencies
-        run: yarn install --frozen-lockfile
+      - name: Setup Node.js and Yarn
+        uses: ./.github/actions/setup-node-yarn
 
       - name: Production Electron build
         run: yarn quasar:build:electron

@@ -33,7 +33,7 @@
     "test:storybook:visual:update": "yarn storybook:build && yarn --cwd .storybook-workspace test:storybook:visual:update",
     "test:storybook:visual:update:headed": "yarn storybook:build && yarn --cwd .storybook-workspace test:storybook:visual:update:headed",
     "test:unit": "vitest run",
-    "test:coverage:electron": "vitest run --coverage --config vitest/vitest.electron.config.mts",
+    "test:coverage:electron": "yarn rebuild:native:node && vitest run --coverage --config vitest/vitest.electron.config.mts && yarn rebuild:native",
     "test:coverage:helpers": "vitest run --coverage --config vitest/vitest.helpers.config.mts",
     "test:coverage:i18n": "vitest run --coverage --config vitest/vitest.i18n.config.mts",
     "test:coverage:src": "vitest run --coverage --config vitest/vitest.src-renderer.config.mts && vitest run --coverage --config vitest/vitest.components.config.mts",
@@ -52,10 +52,7 @@
     "audit:yagni:full": "node .utility-scripts/auditYagni.mjs --jscpd --depcheck",
     "audit:yagni:triage": "node .utility-scripts/auditYagniFullTriage.mjs",
     "generate:icon-catalogs": "node .utility-scripts/generateFaQuasarIconCatalogs.mjs",
-    "postinstall": "electron-builder install-app-deps",
-    "prepare": "husky",
-    "pretest:coverage:electron": "npm rebuild better-sqlite3",
-    "posttest:coverage:electron": "yarn rebuild:native",
+    "postinstall": "husky && electron-builder install-app-deps",
     "rebuild:native": "electron-builder install-app-deps && npx --yes @electron/rebuild -f -w better-sqlite3",
     "rebuild:native:node": "npm rebuild better-sqlite3"
   },
@@ -145,8 +142,8 @@
     "ws": "8.21.0"
   },
   "engines": {
-    "node": ">=22.22.0",
-    "npm": ">= 6.13.4",
-    "yarn": ">= 1.21.1"
-  }
+    "node": ">=26.10.0",
+    "yarn": ">=4.18.0"
+  },
+  "packageManager": "yarn@4.18.0"
 }

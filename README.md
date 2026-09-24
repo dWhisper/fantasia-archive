@@ -2,7 +2,7 @@
 
 Worldbuilding database manager — **Quasar + Vue 3 + Electron** (GPL-3.0).
 
-**Yarn 1.x** (CI pins **`yarn@1.22.19`**). **Node.js 22.22.0+** (`package.json` `engines.node`). Match **22.22** locally to align with CI (`.github/workflows/build.yml`).
+**Yarn Berry 4.18** (`package.json` **`packageManager`**; release vendored in **`.yarn/releases/`** via **`.yarnrc.yml`** **`yarnPath`**, so any **`yarn`** on PATH runs it). **Node.js 26.10.0+** (`package.json` `engines.node`). Node 25+ ships no Corepack — optional: **`npm i -g corepack && corepack enable`**. CI setup: [`.github/actions/setup-node-yarn`](.github/actions/setup-node-yarn/action.yml) (Node **26.10**, **`yarn install --immutable`**).
 
 > **Playwright** runs against **production build** under **`dist/electron`**, not **`quasar dev`**. Rebuild after **`src/`**, **`src-electron/`**, **`src/stores/`**, or **`i18n/*/documents/*.md`** changes:
 >
@@ -15,7 +15,7 @@ Agent/maintainer guidance: [AGENTS.md](AGENTS.md). Architecture depth → AGENTS
 https://quasar.dev/start/quasar-cli — ensure Yarn global bin is on **PATH**.
 
 ```
-yarn global add @quasar/cli
+npm install -g @quasar/cli   # optional; repo also has it as devDependency → yarn quasar ...
 ```
 
 ## Install dependencies

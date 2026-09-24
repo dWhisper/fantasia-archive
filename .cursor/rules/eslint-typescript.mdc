@@ -68,7 +68,7 @@ Run `yarn lint:eslint`, `yarn lint:typescript`, `yarn lint:stylelint`, `yarn tes
 
 ## Node.js version
 
-- **22.22.0+** required (`package.json` `engines.node`). GitHub Actions **`22.22`** (`.github/workflows/build.yml`). Match locally with `nvm` / `fnm` for CI-only issues.
+- **26.10.0+** required (`package.json` `engines.node`). GitHub Actions **`26.10`** (`.github/actions/setup-node-yarn/action.yml`). Match locally with `nvm` / `fnm` for CI-only issues.
 
 ## Related
 

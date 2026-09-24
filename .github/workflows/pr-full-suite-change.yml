@@ -56,23 +56,10 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v5
+      - name: Setup Node.js and Yarn
+        uses: ./.github/actions/setup-node-yarn
         with:
-          node-version: '22.22'
-          cache: yarn
-          cache-dependency-path: |
-            yarn.lock
-            .storybook-workspace/yarn.lock
-
-      - name: Install Yarn 1.x
-        run: npm install -g yarn@1.22.19
-
-      - name: Install root dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Install Storybook workspace dependencies
-        run: yarn --cwd .storybook-workspace install --frozen-lockfile
+          install-storybook: 'true'
 
       - name: Install Playwright Chromium (Electron component and E2E tests)
         run: yarn playwright install chromium --with-deps

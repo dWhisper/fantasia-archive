@@ -40,9 +40,9 @@ const steps = [
   },
   {
     id: 1,
-    name: 'yarn audit root',
+    name: 'yarn npm audit root',
     cmd: 'yarn',
-    args: ['audit', '--level', 'moderate'],
+    args: ['npm', 'audit', '--severity', 'moderate'],
     optional: true
   },
   {

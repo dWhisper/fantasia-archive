@@ -41,6 +41,14 @@ yarn-debug.log*
 yarn-error.log*
 debug-storybook.log*
 
+# Yarn Berry (keep vendored release; cache/state are local)
+.yarn/*
+!.yarn/releases
+!.yarn/patches
+!.yarn/plugins
+.storybook-workspace/.yarn/*
+.pnp.*
+
 # Editor directories and files
 .idea
 *.suo

@@ -20,7 +20,7 @@ ESLint (repo), TypeScript, Stylelint, Vitest + coverage (**95%** / **80%** / **1
 
 `yarn testbatch:verify`
 
-**Yarn 1.x**: do **not** use `yarn check` — validates dependency tree, not this script.
+**Yarn Berry**: no `yarn check`; lockfile drift → **`yarn install --immutable`**.
 
 Equivalent: `yarn lint:eslint && yarn lint:typescript && yarn lint:stylelint && yarn test:coverage:verify`
 

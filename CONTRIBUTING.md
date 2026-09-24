@@ -1,6 +1,6 @@
 # Contributing to Fantasia Archive
 
-Use **Node.js 22.22.0 or newer** and **Yarn 1.x** (CI **Verify** uses **`yarn@1.22.19`** — see [README.md](README.md) and **`.github/workflows/verify.yml`**). Install dependencies with `yarn` from the repository root and, for Storybook or ESLint scopes that touch `.storybook-workspace`, run `yarn --cwd .storybook-workspace install` when that tree changes.
+Use **Node.js 26.10.0 or newer** and **Yarn Berry 4.18** (pinned by `packageManager`; the release is vendored in `.yarn/releases/`, so any `yarn` on PATH delegates to it — see [README.md](README.md) and **`.github/actions/setup-node-yarn/action.yml`**). Install dependencies with `yarn` from the repository root and, for Storybook or ESLint scopes that touch `.storybook-workspace`, run `yarn --cwd .storybook-workspace install` when that tree changes.
 
 Commit messages are enforced by **Husky** and **commitlint** (see [commitlint.config.mjs](commitlint.config.mjs), [git-conventional-commits.mdc](.cursor/rules/git-conventional-commits.mdc), [git-conventional-commits skill](.cursor/skills/git-conventional-commits/SKILL.md)).
 
