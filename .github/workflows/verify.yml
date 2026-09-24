@@ -16,7 +16,13 @@ permissions:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    name: verify (${{ matrix.os }})
+    # macOS catches platform-only failures Ubuntu misses (e.g. '/var' -> '/private/var' tmpdir realpath).
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Check out the code
         uses: actions/checkout@v5
