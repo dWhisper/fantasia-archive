@@ -18,6 +18,7 @@ import { faAppStylingAPI } from 'app/src-electron/contentBridgeAPIs/faAppStyling
 import { faAppConfigAPI } from 'app/src-electron/contentBridgeAPIs/faAppConfigAPI'
 import { faProjectFailsafeAPI } from 'app/src-electron/contentBridgeAPIs/faProjectFailsafeAPI'
 import { faProjectOsOpenAPI } from 'app/src-electron/contentBridgeAPIs/faProjectOsOpenAPI'
+import { faAppMenuAPI } from 'app/src-electron/contentBridgeAPIs/faAppMenuAPI'
 import { faUserSettingsAPI } from './contentBridgeAPIs/faUserSettingsAPI'
 import { projectContentAPI } from 'app/src-electron/contentBridgeAPIs/projectContentAPI'
 import { projectManagementAPI } from 'app/src-electron/contentBridgeAPIs/projectManagementAPI'
@@ -40,6 +41,7 @@ const apiObject = {
   faAppConfig: { ...faAppConfigAPI },
   faProjectFailsafe: { ...faProjectFailsafeAPI },
   faProjectOsOpen: { ...faProjectOsOpenAPI },
+  faAppMenu: { ...faAppMenuAPI },
   projectManagement: { ...projectManagementAPI },
   projectContent: { ...projectContentAPI }
 }

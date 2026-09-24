@@ -47,6 +47,11 @@ export const FA_WINDOW_CONTROL_IPC = {
   setTitleBarOverlayColorsAsync: 'fa-window-control-set-title-bar-overlay-colors-async'
 } as const
 
+/** Native application menu (macOS): main uses 'webContents.send'; preload listens with 'ipcRenderer.on'. */
+export const FA_APP_MENU_IPC = {
+  runActionToRenderer: 'fa-app-menu-run-action-to-renderer'
+} as const
+
 /** App metadata: preload uses 'ipcRenderer.invoke'; main uses 'ipcMain.handle'. */
 export const FA_APP_DETAILS_IPC = {
   getVersionAsync: 'fa-app-details-get-version-async'

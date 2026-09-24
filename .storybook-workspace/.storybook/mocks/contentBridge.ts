@@ -312,6 +312,9 @@ const baseBridge = () => {
       installOsOpenListener: () => undefined,
       sendRendererReady: () => undefined
     },
+    faAppMenu: {
+      installActionListener: () => undefined
+    },
     projectContent: createFaProjectContentBridgeHarnessStub(),
     projectManagement: {
       createProject: async (_input: I_faProjectCreateInput): Promise<I_faProjectCreateResult> => ({
@@ -415,6 +418,10 @@ export const setContentBridgeScenario = (
     faProjectOsOpen: {
       ...nextBridge.faProjectOsOpen,
       ...(overrides.faProjectOsOpen ?? {})
+    },
+    faAppMenu: {
+      ...nextBridge.faAppMenu,
+      ...(overrides.faAppMenu ?? {})
     },
     projectContent: {
       ...nextBridge.projectContent,

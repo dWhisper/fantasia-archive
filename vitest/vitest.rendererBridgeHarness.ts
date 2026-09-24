@@ -154,6 +154,9 @@ export function createResetFaVitestRendererHarness (
         installOsOpenListener: vi.fn(),
         sendRendererReady: vi.fn()
       },
+      faAppMenu: {
+        installActionListener: vi.fn()
+      },
       projectContent: buildVitestProjectContentApiMock(),
       projectManagement: buildVitestProjectManagementApiMock()
     }

@@ -174,3 +174,37 @@ export interface I_faProjectOsOpenAPI {
   installOsOpenListener: (onOpen: (filePath: string) => void) => void
   sendRendererReady: () => void
 }
+
+/**
+ * Renderer actions the native macOS application menu may trigger (payload-free 'runFaAction' ids).
+ */
+export type T_faAppMenuActionId =
+  | 'openAboutFantasiaArchiveDialog'
+  | 'openAdvancedSearchGuideDialog'
+  | 'openAppSettingsDialog'
+  | 'openChangelogDialog'
+  | 'openKeybindSettingsDialog'
+
+/**
+ * Main to renderer bridge for native application menu clicks (macOS).
+ */
+export interface I_faAppMenuAPI {
+
+  /**
+   * Subscribes once to menu clicks; only allowlisted action ids reach the callback.
+   */
+  installActionListener: (onAction: (actionId: T_faAppMenuActionId) => void) => void
+
+}
+
+/**
+ * Structural subset of Electron 'MenuItemConstructorOptions' built by pure menu template functions.
+ */
+export interface I_faAppMenuTemplateItem {
+  accelerator?: string
+  click?: () => void
+  label?: string
+  role?: string
+  submenu?: I_faAppMenuTemplateItem[]
+  type?: 'separator'
+}
