@@ -43,7 +43,8 @@ export const FA_WINDOW_CONTROL_IPC = {
   maximizeAsync: 'fa-window-control-maximize-async',
   resizeToggleAsync: 'fa-window-control-resize-toggle-async',
   closeAsync: 'fa-window-control-close-async',
-  refreshWebContentsAsync: 'fa-window-control-refresh-web-contents-async'
+  refreshWebContentsAsync: 'fa-window-control-refresh-web-contents-async',
+  setTitleBarOverlayColorsAsync: 'fa-window-control-set-title-bar-overlay-colors-async'
 } as const
 
 /** App metadata: preload uses 'ipcRenderer.invoke'; main uses 'ipcMain.handle'. */

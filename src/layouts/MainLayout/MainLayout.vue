@@ -2,7 +2,13 @@
   <q-layout
     :view="appShellLayoutQuasarView"
     class="appShellLayout"
-    :class="[appShellLayoutRouteClass, { 'appShellLayout--macNativeTitleBar': macNativeTitleBar }]"
+    :class="[
+      appShellLayoutRouteClass,
+      {
+        'appShellLayout--macNativeTitleBar': macNativeTitleBar,
+        'appShellLayout--nativeWindowControls': nativeWindowControls
+      }
+    ]"
     data-test-locator="mainLayout"
   >
     <q-header
@@ -24,7 +30,7 @@
 
     <GlobalLanguageSelector v-if="!isFantasiaStorybookCanvas()" />
 
-    <GlobalWindowButtons v-if="!macNativeTitleBar" />
+    <GlobalWindowButtons v-if="!nativeWindowControls" />
 
     <q-splitter
       v-if="showWorkspaceDrawer"
@@ -124,11 +130,12 @@ import ProjectAppControlBar from 'app/src/components/projectUI/ProjectAppControl
 import ProjectHierarchyTree from 'app/src/components/projectUI/ProjectHierarchyTree/ProjectHierarchyTree.vue'
 import ProjectHierarchyTreeSearch from 'app/src/components/projectUI/ProjectHierarchyTreeSearch/ProjectHierarchyTreeSearch.vue'
 
-import { isFaMacNativeTitleBar } from 'app/src/scripts/appInternals/appInternals_manager'
+import { isFaMacNativeTitleBar, isFaNativeWindowControls } from 'app/src/scripts/appInternals/appInternals_manager'
 
 import { useMainLayout, useMainLayoutWorkspaceSidebar } from './scripts/mainLayout_manager'
 import { useMainLayoutHideHierarchyTree } from './scripts/mainLayoutHideHierarchyTreeWiring'
 import { handleMainLayoutWorkspaceDocumentOpenRequest } from './scripts/mainLayoutWorkspaceDocumentOpenWiring'
+import { useMainLayoutTitleBarOverlaySync } from './scripts/mainLayoutTitleBarOverlaySyncWiring'
 import { useFaAppHeaderChromeSpellcheckRefreshVisible } from 'app/src/components/globals/GlobalLanguageSelector/scripts/faAppHeaderChromeSpellcheckReserveWiring'
 import { useProjectOverviewInitialEmptyPromptActive } from 'app/src/components/projectUI/ProjectOverview/scripts/projectOverviewInitialEmptyPromptChromeWiring'
 
@@ -179,8 +186,10 @@ function onSidebarSplitterModelUpdate (widthPx: number): void {
 
 const faAppHeaderChromeSpellcheckRefreshVisible = useFaAppHeaderChromeSpellcheckRefreshVisible()
 
-// macOS draws native traffic lights over the header; custom window buttons are hidden there.
+// Electron uses native window controls (macOS traffic lights, Windows / Linux caption overlay); custom buttons stay for Storybook / SPA.
+const nativeWindowControls = isFaNativeWindowControls()
 const macNativeTitleBar = isFaMacNativeTitleBar()
+useMainLayoutTitleBarOverlaySync(appShellLayoutRouteClass)
 </script>
 
 <style lang="scss" scoped>
@@ -223,10 +232,14 @@ const macNativeTitleBar = isFaMacNativeTitleBar()
   padding-right: $mainLayout-appHeader-chromeRightReserveWithSpellcheckPx;
 }
 
-/* macOS: native traffic lights sit at the header's left edge; no custom window buttons on the right. */
-.appShellLayout--macNativeTitleBar {
-  --fa-globalWindowButtons-reserveWidth: 0px;
+/* Native window controls: reserve exactly the Windows / Linux caption overlay width (Window Controls Overlay env vars);
+ * with no overlay (macOS) the fallbacks resolve to 0. */
+.appShellLayout--nativeWindowControls {
+  --fa-globalWindowButtons-reserveWidth: calc(100vw - env(titlebar-area-x, 0px) - env(titlebar-area-width, 100vw));
+}
 
+/* macOS: native traffic lights sit at the header's left edge. */
+.appShellLayout--macNativeTitleBar {
   .appHeader__inner {
     padding-left: $mainLayout-appHeader-macTrafficLightsReservePx;
   }

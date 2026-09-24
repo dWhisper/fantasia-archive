@@ -92,7 +92,8 @@ export function createResetFaVitestRendererHarness (
         maximizeWindow: vi.fn(async () => undefined),
         minimizeWindow: vi.fn(async () => undefined),
         refreshWebContents: vi.fn(async () => undefined),
-        resizeWindow: vi.fn(async () => undefined)
+        resizeWindow: vi.fn(async () => undefined),
+        setTitleBarOverlayColors: vi.fn(async () => undefined)
       },
       faDevToolsControl: {
         checkDevToolsStatus: vi.fn(async () => false),

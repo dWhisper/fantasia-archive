@@ -95,6 +95,19 @@ export interface I_faWindowControlAPI {
    */
   refreshWebContents: () => Promise<void>
 
+  /**
+   * Recolors the Windows / Linux native caption-button overlay to match the app header (no-op on macOS).
+   */
+  setTitleBarOverlayColors: (colors: I_faTitleBarOverlayColors) => Promise<void>
+
+}
+
+/**
+ * Header-matched colors for the native caption-button overlay, both '#RRGGBB'.
+ */
+export interface I_faTitleBarOverlayColors {
+  color: string
+  symbolColor: string
 }
 
 /**

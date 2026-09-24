@@ -8,14 +8,24 @@ export const FA_MAC_TRAFFIC_LIGHT_POSITION = {
 } as const
 
 /**
- * Window chrome per platform: macOS keeps native traffic lights over the custom header ('titleBarStyle: hidden'),
- * Windows and Linux stay frameless and render 'GlobalWindowButtons' instead.
+ * Initial Windows / Linux caption-button overlay: '$dark-middle' header fill with '$accent' glyphs, 36px tall like the header.
+ * The renderer re-syncs colors from the live header via 'setTitleBarOverlay' once themes and routes resolve.
+ */
+export const FA_TITLE_BAR_OVERLAY_DEFAULTS = {
+  color: '#183e4d',
+  height: 36,
+  symbolColor: '#f5f5f5'
+} as const
+
+/**
+ * Window chrome per platform. All platforms hide the OS title bar so the app header is the drag region.
+ * macOS keeps native traffic lights; Windows and Linux use the native Window Controls Overlay caption buttons.
  */
 export function resolveFaMainWindowChromeOptions (
   platform: string
 ): {
-    frame?: boolean
-    titleBarStyle?: 'hidden'
+    titleBarOverlay?: { color: string, height: number, symbolColor: string }
+    titleBarStyle: 'hidden'
     trafficLightPosition?: { x: number, y: number }
   } {
   if (platform === 'darwin') {
@@ -26,6 +36,7 @@ export function resolveFaMainWindowChromeOptions (
   }
 
   return {
-    frame: false
+    titleBarOverlay: { ...FA_TITLE_BAR_OVERLAY_DEFAULTS },
+    titleBarStyle: 'hidden'
   }
 }

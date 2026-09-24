@@ -246,7 +246,8 @@ const baseBridge = () => {
       maximizeWindow: async () => undefined,
       minimizeWindow: async () => undefined,
       refreshWebContents: async () => undefined,
-      resizeWindow: async () => undefined
+      resizeWindow: async () => undefined,
+      setTitleBarOverlayColors: async () => undefined
     },
     faDevToolsControl: {
       checkDevToolsStatus: async () => false,
