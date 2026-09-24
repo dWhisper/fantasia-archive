@@ -19,23 +19,11 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v5
+      # Storybook workspace install: ESLint scopes .storybook-workspace
+      - name: Setup Node.js and Yarn
+        uses: ./.github/actions/setup-node-yarn
         with:
-          node-version: '22.22'
-          cache: yarn
-          cache-dependency-path: |
-            yarn.lock
-            .storybook-workspace/yarn.lock
-
-      - name: Install Yarn 1.x
-        run: npm install -g yarn@1.22.19
-
-      - name: Install root dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Install Storybook workspace dependencies (ESLint scopes .storybook-workspace)
-        run: yarn --cwd .storybook-workspace install --frozen-lockfile
+          install-storybook: 'true'
 
       - name: Quality gate
         run: yarn testbatch:verify

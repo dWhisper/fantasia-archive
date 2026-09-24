@@ -48,7 +48,7 @@ See [vitest-tests.mdc](../../rules/vitest-tests.mdc) **Vitest coverage tiers (CI
 
 ## Playwright (component + E2E)
 
-**Critical**: Playwright targets **built, production** Electron app. After **any** source change affecting exercised code: `quasar build -m electron` or **`yarn quasar:build:electron`** before Playwright. **Node.js 22.22.0+** locally.
+**Critical**: Playwright targets **built, production** Electron app. After **any** source change affecting exercised code: `quasar build -m electron` or **`yarn quasar:build:electron`** before Playwright. **Node.js 26.10.0+** locally.
 
 **Stale packaged bundle** — Harness starts **`Fantasia Archive.exe`** from **`dist/electron/Packaged`**, not live Vite dev server. IPC still matching pre-change behavior → rebuild before next Playwright run.
 

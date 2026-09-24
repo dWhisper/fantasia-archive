@@ -1,0 +1,54 @@
+# Shared toolchain setup: Node 26 + Yarn Berry (release vendored via '.yarnrc.yml' 'yarnPath',
+# version pinned by 'package.json' 'packageManager'). Node 25+ no longer bundles Corepack, so it is
+# installed from npm first. Yarn's global cache is restored keyed on both lockfiles.
+name: Setup Node and Yarn
+description: Install Node 26, enable Corepack, restore the Yarn cache, and run an immutable install.
+
+inputs:
+  install-storybook:
+    description: Also install '.storybook-workspace' dependencies (separate Yarn project).
+    required: false
+    default: 'false'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v5
+      with:
+        node-version: '26.10'
+
+    # '--force' replaces runner-image global Yarn 1 shims (Windows images ship 'yarn.cmd' -> EEXIST).
+    - name: Enable Corepack
+      shell: bash
+      run: |
+        npm install -g --force corepack@0.36.0
+        corepack enable
+
+    - name: Resolve Yarn cache folder
+      id: yarn-cache
+      shell: bash
+      env:
+        COREPACK_ENABLE_DOWNLOAD_PROMPT: '0'
+      run: echo "dir=$(yarn config get cacheFolder)" >> "$GITHUB_OUTPUT"
+
+    - name: Restore Yarn cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.yarn-cache.outputs.dir }}
+        key: yarn-berry-${{ runner.os }}-${{ hashFiles('yarn.lock', '.storybook-workspace/yarn.lock') }}
+        restore-keys: |
+          yarn-berry-${{ runner.os }}-
+
+    - name: Install root dependencies
+      shell: bash
+      env:
+        COREPACK_ENABLE_DOWNLOAD_PROMPT: '0'
+      run: yarn install --immutable
+
+    - name: Install Storybook workspace dependencies
+      if: inputs.install-storybook == 'true'
+      shell: bash
+      env:
+        COREPACK_ENABLE_DOWNLOAD_PROMPT: '0'
+      run: yarn --cwd .storybook-workspace install --immutable

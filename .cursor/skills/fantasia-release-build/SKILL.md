@@ -16,7 +16,7 @@ description: >-
 
 ## Tooling
 
-- **Node.js 22.22.0+** (`engines.node`)
+- **Node.js 26.10.0+** (`engines.node`)
 - **electron-builder** devDependency; Quasar Electron mode drives pipeline (**`quasar.config.ts`**)
 
 ## Checklist before release candidate

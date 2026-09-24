@@ -10,7 +10,7 @@ description: >-
 
 ## Stack
 
-- **Node.js 22.22.0+** (`package.json` `engines.node`)
+- **Node.js 26.10.0+** (`package.json` `engines.node`)
 - **Vue 3** + **Quasar** (`quasar` v2, `@quasar/app-vite`)
 - **Pinia** (`src/stores/`); router `src/router/`
 - **TypeScript**; alias **`app/`** → project root

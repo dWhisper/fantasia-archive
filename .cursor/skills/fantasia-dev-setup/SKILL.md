@@ -1,7 +1,7 @@
 ---
 name: fantasia-dev-setup
 description: >-
-  Sets up and runs Fantasia Archive locally using Yarn, Node.js 22.22 or newer,
+  Sets up and runs Fantasia Archive locally using Yarn Berry 4.18, Node.js 26.10 or newer,
   and Quasar Electron mode. Use when installing dependencies, choosing dev vs production
   build commands, or when the user mentions environment setup, CLI, or first
   run.
@@ -11,9 +11,10 @@ description: >-
 
 ## Toolchain
 
-- **Package manager**: Yarn 1.x (CI: **`yarn@1.22.19`**)
-- **Node.js**: **22.22.0+** (`package.json` `engines.node` **`>=22.22.0`**)
-- **Quasar CLI** (optional global): `yarn global add @quasar/cli`
+- **Package manager**: Yarn Berry **4.18.0** — `packageManager` + vendored **`.yarn/releases/`** (`yarnPath`), **`nodeLinker: node-modules`**; CI **`yarn install --immutable`** via **`.github/actions/setup-node-yarn`**
+- **Node.js**: **26.10.0+** (`package.json` `engines.node` **`>=26.10.0`**); no bundled Corepack on 25+ (`npm i -g corepack` optional)
+- **Berry gotchas**: no `pre*`/`post*` script hooks (chain inline); `prepare` not run on install (husky in **`postinstall`**); no `yarn global` (use `npm i -g`); audit = **`yarn npm audit`**
+- **Quasar CLI** (optional global): `npm install -g @quasar/cli`
 - **CI**: [`.github/workflows/verify.yml`](../../../.github/workflows/verify.yml) — **`yarn testbatch:verify`** only; Storybook VRT local only
 
 ## Install
@@ -91,7 +92,7 @@ quasar build -m electron
 
 **Storybook**: `yarn --cwd .storybook-workspace install` after root **`yarn`**.
 
-See [eslint-typescript.mdc](../../rules/eslint-typescript.mdc), [fantasia-dev-scoped-verify](../fantasia-dev-scoped-verify/SKILL.md), [fantasia-testing](../fantasia-testing/SKILL.md). **Yarn 1.x**: **`yarn check`** ≠ quality gate — full **`yarn testbatch:verify`** at commit; dev scoped gate while iterating.
+See [eslint-typescript.mdc](../../rules/eslint-typescript.mdc), [fantasia-dev-scoped-verify](../fantasia-dev-scoped-verify/SKILL.md), [fantasia-testing](../fantasia-testing/SKILL.md). **Yarn Berry**: no **`yarn check`** — quality gate = **`yarn testbatch:verify`** at commit; dev scoped gate while iterating.
 
 ## Types
 
