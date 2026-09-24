@@ -6685,9 +6685,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fantasia-archive@workspace:.":
+"fantasia-archive-dw@workspace:.":
   version: 0.0.0-use.local
-  resolution: "fantasia-archive@workspace:."
+  resolution: "fantasia-archive-dw@workspace:."
   dependencies:
     "@commitlint/cli": "npm:^20.5.0"
     "@commitlint/config-conventional": "npm:^20.5.0"

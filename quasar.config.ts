@@ -190,7 +190,8 @@ export default defineConfig((ctx) => {
       packager: {},
 
       builder: {
-        appId: 'fantasia-archive',
+        // Fork identity: distinct from upstream so installs never share userData or bundle id.
+        appId: 'com.dwhisper.fantasia-archive',
         productName: 'Fantasia Archive',
         fileAssociations: [
           {
@@ -233,7 +234,8 @@ export default defineConfig((ctx) => {
               Comment: 'A worldbuilding database manager',
               StartupNotify: 'true',
               Terminal: 'false',
-              StartupWMClass: 'fantasia-archive'
+              // Matches Electron WM_CLASS from 'app.setName(package.json name)'.
+              StartupWMClass: 'fantasia-archive-dw'
             }
           }
         },

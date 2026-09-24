@@ -1,7 +1,8 @@
 # Manually triggered release build. Packages the production Electron app for
-# Windows, macOS, and Linux with no CI test gate (testing runs in the separate
-# verify.yml and pr-full-suite-* workflows). Linux uses a matrix so each
-# installer format installs only the tooling it needs.
+# Windows, macOS, and Linux after the verify.yml quality gate passes (lint, types,
+# stylelint, Vitest coverage). Playwright and Storybook VRT stay in the
+# pr-full-suite-* workflows. Linux uses a matrix so each installer format installs
+# only the tooling it needs.
 
 name: Build App - FA Rewrite
 
@@ -16,8 +17,13 @@ permissions:
   contents: read
 
 jobs:
+  verify:
+    name: Quality gate
+    uses: ./.github/workflows/verify.yml
+
   build-windows:
     name: Windows package
+    needs: verify
     runs-on: windows-latest
     environment: production
     timeout-minutes: 120
@@ -42,6 +48,7 @@ jobs:
 
   build-linux:
     name: Linux (${{ matrix.linux_pkg }})
+    needs: verify
     runs-on: ubuntu-latest
     environment: production
     timeout-minutes: 120
@@ -79,6 +86,7 @@ jobs:
 
   build-macos:
     name: macOS package
+    needs: verify
     runs-on: macOS-latest
     environment: production
     timeout-minutes: 120
