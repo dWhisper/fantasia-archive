@@ -769,3 +769,53 @@ test('Test that MainLayout skips app styling refresh when faAppStyling bridge is
 afterEach(() => {
   setFantasiaStorybookCanvasFlag(false)
 })
+
+/**
+ * MainLayout
+ * macOS Electron uses native traffic lights: layout gets the platform class and skips GlobalWindowButtons.
+ */
+test('Test that MainLayout hides GlobalWindowButtons under the macOS native title bar', async () => {
+  const { Platform } = await import('quasar')
+  const originalIs = Platform.is
+  setFantasiaStorybookCanvasFlag(false)
+  vi.stubEnv('MODE', 'electron')
+  Platform.is = {
+    ...originalIs,
+    mac: true
+  }
+
+  const w = await mountMainLayoutForVitest('/')
+  await flushPromises()
+
+  expect(w.find('.appShellLayout--macNativeTitleBar').exists()).toBe(true)
+  expect(w.find('[data-test-stub="global-window-buttons"]').exists()).toBe(false)
+
+  w.unmount()
+  Platform.is = originalIs
+  vi.unstubAllEnvs()
+})
+
+/**
+ * MainLayout
+ * Windows, Linux, and non-Electron builds keep the custom window buttons.
+ */
+test('Test that MainLayout keeps GlobalWindowButtons outside the macOS native title bar', async () => {
+  const { Platform } = await import('quasar')
+  const originalIs = Platform.is
+  setFantasiaStorybookCanvasFlag(false)
+  vi.stubEnv('MODE', 'spa')
+  Platform.is = {
+    ...originalIs,
+    mac: true
+  }
+
+  const w = await mountMainLayoutForVitest('/')
+  await flushPromises()
+
+  expect(w.find('.appShellLayout--macNativeTitleBar').exists()).toBe(false)
+  expect(w.find('[data-test-stub="global-window-buttons"]').exists()).toBe(true)
+
+  w.unmount()
+  Platform.is = originalIs
+  vi.unstubAllEnvs()
+})

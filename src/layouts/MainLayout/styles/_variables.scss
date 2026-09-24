@@ -12,6 +12,8 @@ $mainLayout-appHeader-chromeRightReserveBasePx: calc(#{globalWindowButtons.$glob
 $mainLayout-appHeader-chromeRightReserveWithSpellcheckPx: calc(#{$mainLayout-appHeader-chromeRightReserveBasePx} + #{globalLanguageSelector.$globalLanguageSelector-spellcheckRefresh-gap} + #{globalLanguageSelector.$globalLanguageSelector-diameter});
 $mainLayout-appHeader-zIndex: 7000;
 $mainLayout-appHeader-heightPx: 36px;
+/* Left inset for macOS traffic lights: 'FA_MAC_TRAFFIC_LIGHT_POSITION.x' (14px) + three 12px buttons with 8px gaps + trailing gap. */
+$mainLayout-appHeader-macTrafficLightsReservePx: 80px;
 $mainLayout-sidebarMinWidthPx: 375px;
 $mainLayout-sidebarPanel-backgroundColor: fa-v('dark', $dark);
 $mainLayout-sidebarSplitterSeparator-zIndex: 500;

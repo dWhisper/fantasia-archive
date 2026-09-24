@@ -5,6 +5,7 @@ import { registerFaProjectOsOpenMainWindow } from 'app/src-electron/mainScripts/
 import { applyFaSpellCheckerLanguagesToSession } from 'app/src-electron/mainScripts/windowManagement/faSpellCheckerSessionWiring'
 import { registerFaChromiumCtrlShiftShortcutSuppress } from 'app/src-electron/mainScripts/chromiumFixes/faChromiumCtrlShiftShortcutSuppressWiring'
 import { registerFaMainWindowWebContentsSessionReset } from 'app/src-electron/mainScripts/windowManagement/faMainWindowWebContentsSessionResetWiring'
+import { resolveFaMainWindowChromeOptions } from 'app/src-electron/mainScripts/windowManagement/functions/faMainWindowChromeOptions'
 import { isFaMainWindowNavigationAllowed } from 'app/src-electron/mainScripts/windowManagement/functions/faMainWindowNavigationAllowlist'
 import { setupSpellChecker } from 'app/src-electron/mainScripts/windowManagement/spellCheckerWiring'
 import { getFaUserSettings } from 'app/src-electron/mainScripts/userSettings/userSettings_manager'
@@ -154,7 +155,7 @@ export const mainWindowCreation = async () => {
     width: displaySizes.width,
     height: displaySizes.height,
     useContentSize: true,
-    frame: false,
+    ...resolveFaMainWindowChromeOptions(process.platform),
     show: false,
     center: true,
     icon: path.resolve(currentDir, '../icons/icon.png'),
