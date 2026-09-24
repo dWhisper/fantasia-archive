@@ -2,7 +2,7 @@
   <q-layout
     :view="appShellLayoutQuasarView"
     class="appShellLayout"
-    :class="appShellLayoutRouteClass"
+    :class="[appShellLayoutRouteClass, { 'appShellLayout--macNativeTitleBar': macNativeTitleBar }]"
     data-test-locator="mainLayout"
   >
     <q-header
@@ -24,7 +24,7 @@
 
     <GlobalLanguageSelector v-if="!isFantasiaStorybookCanvas()" />
 
-    <GlobalWindowButtons />
+    <GlobalWindowButtons v-if="!macNativeTitleBar" />
 
     <q-splitter
       v-if="showWorkspaceDrawer"
@@ -124,6 +124,8 @@ import ProjectAppControlBar from 'app/src/components/projectUI/ProjectAppControl
 import ProjectHierarchyTree from 'app/src/components/projectUI/ProjectHierarchyTree/ProjectHierarchyTree.vue'
 import ProjectHierarchyTreeSearch from 'app/src/components/projectUI/ProjectHierarchyTreeSearch/ProjectHierarchyTreeSearch.vue'
 
+import { isFaMacNativeTitleBar } from 'app/src/scripts/appInternals/appInternals_manager'
+
 import { useMainLayout, useMainLayoutWorkspaceSidebar } from './scripts/mainLayout_manager'
 import { useMainLayoutHideHierarchyTree } from './scripts/mainLayoutHideHierarchyTreeWiring'
 import { handleMainLayoutWorkspaceDocumentOpenRequest } from './scripts/mainLayoutWorkspaceDocumentOpenWiring'
@@ -176,6 +178,9 @@ function onSidebarSplitterModelUpdate (widthPx: number): void {
 }
 
 const faAppHeaderChromeSpellcheckRefreshVisible = useFaAppHeaderChromeSpellcheckRefreshVisible()
+
+// macOS draws native traffic lights over the header; custom window buttons are hidden there.
+const macNativeTitleBar = isFaMacNativeTitleBar()
 </script>
 
 <style lang="scss" scoped>
@@ -216,6 +221,15 @@ const faAppHeaderChromeSpellcheckRefreshVisible = useFaAppHeaderChromeSpellcheck
 
 .appHeader__inner--spellcheckRefreshVisible {
   padding-right: $mainLayout-appHeader-chromeRightReserveWithSpellcheckPx;
+}
+
+/* macOS: native traffic lights sit at the header's left edge; no custom window buttons on the right. */
+.appShellLayout--macNativeTitleBar {
+  --fa-globalWindowButtons-reserveWidth: 0px;
+
+  .appHeader__inner {
+    padding-left: $mainLayout-appHeader-macTrafficLightsReservePx;
+  }
 }
 
 .appHeader__tabsRegion {

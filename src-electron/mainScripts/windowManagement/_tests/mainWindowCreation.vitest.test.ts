@@ -8,6 +8,8 @@ import {
 } from '../mainWindowCreationWiring'
 import type { BrowserWindow } from 'electron'
 
+import { resolveFaMainWindowChromeOptions } from '../functions/faMainWindowChromeOptions'
+
 const {
   BrowserWindowMock,
   appMock,
@@ -257,7 +259,7 @@ test('Test that the main window is created successfully', async () => {
   expect(registerFaProjectOsOpenMainWindowMock).toHaveBeenCalledOnce()
   expect(BrowserWindowMock).toHaveBeenCalledOnce()
   expect(BrowserWindowMock.mock.calls[0]![0]!).toMatchObject({
-    frame: false,
+    ...resolveFaMainWindowChromeOptions(process.platform),
     height: 1080,
     show: false,
     width: 1920

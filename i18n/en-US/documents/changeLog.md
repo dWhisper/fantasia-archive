@@ -19,6 +19,7 @@
 - **Controls**: Reusable **FaSelectInput** select fields support chips or an **inline** selected row (icon + label, no chips), filter highlighting of whole matching words, optional create-new, colored option icons, and document / template / simple / **tags** modes. Dropdown menus use a fixed **600px** width, center under the field when space allows, fill taller lists on first open, and use low-opacity separators between options. **Tab** into the field opens the menu; choosing the same option again still counts as an activation (so parents can reopen the next step).
 
 ### Bugfixes & Optimizations
+- **macOS**: The window now uses the native macOS close, minimize, and zoom buttons at the top left of the app header instead of the custom buttons at the top right. The menus move right to make room, and the language selector sits at the right edge. Windows and Linux keep the existing buttons.
 - **Toolchain**: Development and release builds now use **Yarn Berry 4.18** (vendored in the repository, **node-modules** linker) and **Node.js 26.10** or newer instead of Yarn 1 and Node.js 22.
 - **Theme**: Horizontal and vertical separators are a hair thinner (0.9px instead of 1px). Menu hairline rows stay as they were.
 - **Project Media**: After **Save** on the list slide-out, that thumb's title strip (or URL fallback) updates without closing **Project Media**.
