@@ -39,7 +39,9 @@ vi.mock('app/src-electron/mainScripts/ipcManagement/assertMainWindowSenderWiring
 
 import { runWithFaProjectDatabaseForIpcAsync, readMirroredActiveProjectFilePathSync, runWithFaProjectDatabaseSync } from '../faProjectDatabaseEnsureConnectedWiring'
 
-const absoluteProjectPath = path.join(os.tmpdir(), 'fa-ensure-connected-mock.faproject')
+// Canonical tmpdir: macOS '/var' symlinks to '/private/var' and path hardening returns the realpath.
+const canonicalTmpDir = fs.realpathSync(os.tmpdir())
+const absoluteProjectPath = path.join(canonicalTmpDir, 'fa-ensure-connected-mock.faproject')
 
 beforeEach(() => {
   getDbMock.mockReset()
@@ -143,7 +145,7 @@ test('runWithFaProjectDatabaseForIpcAsync rejects when renderer path differs fro
   getDbMock.mockReturnValue(null)
   getPathMock.mockReturnValue(absoluteProjectPath)
   reconnectMock.mockReturnValue(false)
-  const otherPath = path.join(os.tmpdir(), 'fa-ensure-connected-other.faproject')
+  const otherPath = path.join(canonicalTmpDir, 'fa-ensure-connected-other.faproject')
   fs.writeFileSync(otherPath, '')
   try {
     requestPathMock.mockResolvedValueOnce(otherPath)

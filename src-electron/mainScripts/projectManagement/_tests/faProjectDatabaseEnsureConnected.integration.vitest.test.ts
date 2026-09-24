@@ -13,6 +13,9 @@ import {
 import { runWithFaProjectDatabaseForIpcAsync, runWithFaProjectDatabaseSync } from '../faProjectDatabaseEnsureConnectedWiring'
 import { reconnectFaProjectDatabaseAtKnownPathSync } from '../faProjectReconnectAtKnownPathWiring'
 
+// Canonical tmpdir: macOS '/var' symlinks to '/private/var' and path hardening returns the realpath.
+const canonicalTmpDir = fs.realpathSync(os.tmpdir())
+
 const requestPathMock = vi.hoisted(() => vi.fn(async (): Promise<string | null> => null))
 const applyMigrationsMock = vi.hoisted(() => vi.fn())
 const quickCheckMock = vi.hoisted(() => vi.fn())
@@ -81,7 +84,7 @@ function seedTestProjectFile (filePath: string): void {
 }
 
 test('recoverable sqlite error closes handle only, reconnects, then work succeeds', () => {
-  testPath = path.join(os.tmpdir(), `fa-ensure-sqlite-retry-${Date.now()}.faproject`)
+  testPath = path.join(canonicalTmpDir, `fa-ensure-sqlite-retry-${Date.now()}.faproject`)
   seedTestProjectFile(testPath)
   expect(reconnectFaProjectDatabaseAtKnownPathSync(testPath)).toBe(true)
   let calls = 0
@@ -102,7 +105,7 @@ test('recoverable sqlite error closes handle only, reconnects, then work succeed
 })
 
 test('SQLITE_CORRUPT errors are not retried', () => {
-  testPath = path.join(os.tmpdir(), `fa-ensure-corrupt-${Date.now()}.faproject`)
+  testPath = path.join(canonicalTmpDir, `fa-ensure-corrupt-${Date.now()}.faproject`)
   seedTestProjectFile(testPath)
   expect(reconnectFaProjectDatabaseAtKnownPathSync(testPath)).toBe(true)
   expect(() => {
@@ -115,7 +118,7 @@ test('SQLITE_CORRUPT errors are not retried', () => {
 })
 
 test('malformed disk image message is not retried', () => {
-  testPath = path.join(os.tmpdir(), `fa-ensure-malformed-${Date.now()}.faproject`)
+  testPath = path.join(canonicalTmpDir, `fa-ensure-malformed-${Date.now()}.faproject`)
   seedTestProjectFile(testPath)
   expect(reconnectFaProjectDatabaseAtKnownPathSync(testPath)).toBe(true)
   expect(() => {
@@ -126,7 +129,7 @@ test('malformed disk image message is not retried', () => {
 })
 
 test('no database when last-known file is missing returns ok false', () => {
-  testPath = path.join(os.tmpdir(), `fa-ensure-missing-${Date.now()}.faproject`)
+  testPath = path.join(canonicalTmpDir, `fa-ensure-missing-${Date.now()}.faproject`)
   fs.writeFileSync(testPath, '')
   expect(reconnectFaProjectDatabaseAtKnownPathSync(testPath)).toBe(true)
   closeFaProjectActiveDatabaseHandleOnly()
@@ -149,7 +152,7 @@ test('no database when last-known file is missing returns ok false', () => {
 })
 
 test('getFaProjectLastKnownActiveProjectFilePath survives handle-only close for reconnect', () => {
-  testPath = path.join(os.tmpdir(), `fa-ensure-path-${Date.now()}.faproject`)
+  testPath = path.join(canonicalTmpDir, `fa-ensure-path-${Date.now()}.faproject`)
   seedTestProjectFile(testPath)
   expect(reconnectFaProjectDatabaseAtKnownPathSync(testPath)).toBe(true)
   const stored = getFaProjectLastKnownActiveProjectFilePath()
@@ -165,7 +168,7 @@ test('getFaProjectLastKnownActiveProjectFilePath survives handle-only close for 
 })
 
 test('runWithFaProjectDatabaseForIpcAsync returns false when mirrored path is cleared and does not trust renderer-only path', async () => {
-  testPath = path.join(os.tmpdir(), `fa-ensure-ipc-fail-${Date.now()}.faproject`)
+  testPath = path.join(canonicalTmpDir, `fa-ensure-ipc-fail-${Date.now()}.faproject`)
   seedTestProjectFile(testPath)
   closeFaProjectActiveDatabase()
   requestPathMock.mockResolvedValueOnce(testPath)
@@ -177,7 +180,7 @@ test('runWithFaProjectDatabaseForIpcAsync returns false when mirrored path is cl
 })
 
 test('runWithFaProjectDatabaseForIpcAsync returns false when renderer path does not match mirrored path', async () => {
-  testPath = path.join(os.tmpdir(), `fa-ensure-ipc-mismatch-${Date.now()}.faproject`)
+  testPath = path.join(canonicalTmpDir, `fa-ensure-ipc-mismatch-${Date.now()}.faproject`)
   seedTestProjectFile(testPath)
   expect(reconnectFaProjectDatabaseAtKnownPathSync(testPath)).toBe(true)
   closeFaProjectActiveDatabaseHandleOnly()
